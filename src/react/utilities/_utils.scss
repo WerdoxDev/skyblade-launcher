@@ -1,0 +1,25 @@
+%no-border {
+  border-width: 0;
+  border-color: transparent;
+  border-style: none;
+}
+
+%no-background {
+  background-color: transparent;
+  background-image: none;
+}
+
+%no-border-background {
+  border-width: 0;
+  border-color: transparent;
+  border-style: none;
+  background-color: transparent;
+  background-image: none;
+}
+
+%zero-position {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

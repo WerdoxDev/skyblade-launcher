@@ -1,0 +1,210 @@
+@import "../react/utilities/utils";
+
+.window-background {
+    position: absolute;
+    background-color: #34495e;
+    border-color: transparent;
+    border-width: 0;
+    border-radius: 10px;
+    width: 80%;
+    height: 100%;
+}
+
+.window-main {
+    @extend %zero-position;
+    position: absolute;
+    background-image: linear-gradient(to bottom left, #3498db, #2c3e50);
+    border-color: transparent;
+    border-radius: 10px;
+    border-width: 0;
+    margin: 12px;
+    box-shadow: 0 0 10px black;
+    display: grid;
+    grid-template-columns: 190px auto;
+}
+
+.left-nav {
+    float: left;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 120px auto;
+
+    .title {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+
+        h2 {
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+        }
+    }
+
+    .button-container {
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        position: relative;
+        grid-template-rows: 15% 15% 15% 15% 15% 15%;
+
+        .page-indicator {
+            @extend %zero-position;
+            background-color: #293642;
+            width: 12px;
+            height: 15%;
+            margin-left: -12px;
+            position: absolute;
+
+            .indicator {
+                @extend %zero-position;
+                position: absolute;
+                background-color: #f1c40f;
+                margin: 6px 3px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px 2px #f1c40f;
+            }
+        }
+
+        .spacer {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+
+.center-content {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+    grid-column-start: 2;
+
+    .home-container,
+    .store-container,
+    .library-container,
+    .friends-container,
+    .settings-container {
+        @extend %zero-position;
+        animation: fadein 0.5s;
+        padding: 10px;
+        float: left;
+        margin: 1rem;
+        position: absolute;
+        font-size: 15px;
+    }
+
+    .store-container {
+        overflow: auto;
+        display: grid;
+        grid-template-rows: 30% auto;
+        margin: 0;
+        padding: 0;
+
+        .games-container {
+            padding: 10px;
+            margin: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 260px);
+            grid-template-rows: repeat(4, 140px);
+            gap: 6rem 2rem;
+        }
+
+        .title-container {
+            width: 100%;
+            height: 100%;
+            background-color: #34495e;
+            text-align: center;
+            box-shadow: 0 5px 6px #2c3e50;
+
+            h1 {
+                position: static;
+                font-size: 4vmax;
+                color: white;
+                width: 100%;
+            }
+
+            img {
+                position: relative;
+                object-fit: cover;
+                width: 100%;
+            }
+        }
+    }
+
+    .library-container {
+        display: grid;
+        margin-bottom: 10px;
+        grid-template-columns: repeat(auto-fill, 260px);
+        grid-template-rows: repeat(4, 140px);
+        gap: 6rem 2rem;
+
+        .spacer {
+            height: 1px;
+            width: 100%;
+        }
+    }
+
+    .version-text {
+        position: fixed;
+        font-size: 20px;
+        color: white;
+        bottom: 20px;
+        right: 30px;
+        margin: 0;
+    }
+}
+
+.vl1 {
+    position: absolute;
+    border-left: 1px solid #ecf0f180;
+    border-right: 1px solid #ecf0f180;
+    height: 100%;
+    left: 190px;
+}
+
+.vl2 {
+    position: absolute;
+    border-left: 1px solid #ecf0f180;
+    border-right: 1px solid #ecf0f180;
+    height: 100%;
+    left: 46%;
+}
+
+.vl3 {
+    position: absolute;
+    border-left: 1px solid #ecf0f180;
+    border-right: 1px solid #ecf0f180;
+    height: 100%;
+    left: 73%;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ecf0f1;
+    border-radius: 0 10px 10px 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #34495e;
+    border-radius: 0 10px 10px 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #2c3e50;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-5%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
