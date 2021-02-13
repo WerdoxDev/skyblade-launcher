@@ -9,4 +9,4 @@ ReactDOM.render(
     document.getElementById("root")
 );
 
-switchToPage('store', 1, 'grid')
+switchToPage('store-container', 'grid')

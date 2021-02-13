@@ -18,15 +18,15 @@ if (require("electron-squirrel-startup")) {
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 1000,
-        height: 600,
-        minWidth: 1000,
-        minHeight: 600,
+        width: 1200,
+        height: 768,
+        minWidth: 1200,
+        minHeight: 768,
         frame: false,
-        transparent: true,
+        shadow: true,
         webPreferences: {
             nodeIntegration: true,
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, "preload.js")
         }
     });
 
@@ -53,28 +53,28 @@ app.on("window-all-closed", () => {
     if (process.platform !== "darwin") {
         app.quit();
     }
-})
+});
 
 app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
-})
+});
 
-ipcMain.on(channels.APP_INFO, (event) => {
+ipcMain.on(channels.APP_INFO, event => {
     event.sender.send(channels.APP_INFO, app.getVersion());
-})
+});
 
 ipcMain.on(channels.TITLE_BAR, (event, arg) => {
-    if (arg === 'minimize') {
+    if (arg === "minimize") {
         win.minimize();
-    } else if (arg === 'maximize') {
+    } else if (arg === "maximize") {
         if (win.isMaximized()) {
             win.unmaximize();
         } else {
             win.maximize();
         }
-    } else if (arg === 'close') {
+    } else if (arg === "close") {
         win.close();
     }
 });
@@ -83,42 +83,42 @@ let downloadItem;
 
 ipcMain.on(channels.DOWNLOAD_START, (event, arg) => {
     win.webContents.downloadURL(arg);
-})
+});
 
 ipcMain.on(channels.DOWNLOAD_PAUSE, () => {
     downloadItem.isPaused() ? downloadItem.resume() : downloadItem.pause();
-})
+});
 
 ipcMain.on(channels.DOWNLOAD_CANCEL, () => {
     downloadItem.cancel();
-})
+});
 
 function initializeDownloadEvents() {
-    win.webContents.session.on('will-download', (event, item, webContents) => {
+    win.webContents.session.on("will-download", (event, item, webContents) => {
         item.setSavePath(path.join(__dirname, item.getFilename()));
         let lastReceivedBytes = 0;
-        item.on('updated', (event, state) => {
+        item.on("updated", (event, state) => {
             downloadItem = item;
-            if (state === 'interrupted') {
-                console.log('Download is interrupted but can be resumed')
-            } else if (state === 'progressing') {
+            if (state === "interrupted") {
+                console.log("Download is interrupted but can be resumed");
+            } else if (state === "progressing") {
                 if (item.isPaused()) {
-                    console.log('Download is paused');
+                    console.log("Download is paused");
                 } else {
                     win.send(channels.DOWNLOAD_PROGRESS, {
                         current: item.getReceivedBytes(),
                         total: item.getTotalBytes(),
-                        speed: (item.getReceivedBytes() - lastReceivedBytes),
+                        speed: item.getReceivedBytes() - lastReceivedBytes
                     });
                     //console.log(`Received bytes: ${item.getReceivedBytes()} of ${item.getTotalBytes()}`);
                     lastReceivedBytes = item.getReceivedBytes();
                 }
             }
-        })
+        });
 
-        item.once('done', (event, state) => {
-            if (state === 'completed') {
-                console.log('Download successfully');
+        item.once("done", (event, state) => {
+            if (state === "completed") {
+                console.log("Download successfully");
             } else {
                 console.log(`Download failed: ${state}`);
             }

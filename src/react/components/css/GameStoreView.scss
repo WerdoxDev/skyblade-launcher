@@ -1,156 +1,150 @@
-@import "c:/Users/MuffinPlayz/skyblade-launcher/src/react/utilities/utils";
+@import "../../utilities/utils";
 
 .game-store-container {
-    overflow: auto;
-    display: grid;
-    text-align: center;
-    grid-template-rows: 30% auto;
-    margin: 0;
-    padding: 0;
+  overflow: auto;
+  display: grid;
+  text-align: center;
+  grid-template-rows: 30% auto;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  animation: fadeIn 0.25s;
+
+  .title-container {
     width: 100%;
     height: 100%;
-    animation: fadein 0.5s;
+    background-color: #34495e;
+    text-align: center;
+    box-shadow: 0 5px 6px #2c3e50;
 
-    .title-container {
+    h1 {
+      font-size: 4vmax;
+      color: white;
+      width: 100%;
+    }
+
+    button {
+      position: absolute;
+      font-size: 2vmax;
+      left: 20px;
+      top: 20px;
+      background-color: transparent;
+      color: white;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+    }
+  }
+
+  .main-content {
+    grid-row-start: 2;
+    width: 100%;
+    height: 100%;
+
+    .content-border {
+      height: 100px;
+      margin: 20px 20px 0;
+      border-radius: 10px;
+      background-color: white;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 5px 6px #2c3e50;
+
+      .name {
+        flex-shrink: 0.6;
+        display: flex;
         width: 100%;
-        height: 100%;
-        background-color: #34495e;
-        text-align: center;
-        box-shadow: 0 5px 6px #2c3e50;
+        font-size: clamp(30px, 3vmax, 40px);
+        font-weight: bold;
+        color: #34495e;
+        margin-left: 20px;
+      }
 
-        h1 {
-            font-size: 4vmax;
-            color: white;
-            width: 100%;
+      .icon {
+        flex-shrink: 0;
+        display: flex;
+        height: 80px;
+        width: 80px;
+        border-radius: 10px;
+        margin-left: 10px;
+        background-color: #2c3e50;
+      }
+
+      .progress-bar {
+        visibility: hidden;
+        width: 100%;
+        height: 10%;
+        margin-right: 20px;
+        border-radius: 2px;
+        align-items: center;
+
+        .download-status {
+          position: relative;
+          height: 100%;
+          width: 100%;
+          font-size: 1.5vmax;
+          font-weight: bold;
         }
+
+        .background {
+          display: flex;
+          position: relative;
+          border-radius: inherit;
+          height: 100%;
+          width: 100%;
+          background-color: #7f8c8d;
+          align-items: center;
+
+          .filler {
+            border-radius: inherit;
+            height: 115%;
+            transition: width 0.25s ease-in-out;
+            background-color: #f39c12;
+            box-shadow: 0 3px 4px #2c3e50;
+          }
+        }
+      }
+
+      .buttons-container {
+        display: flex;
+        margin-right: 20px;
 
         button {
-            position: absolute;
-            font-size: 2vmax;
-            left: 20px;
-            top: 20px;
-            background-color: transparent;
-            color: white;
-            border: 0;
-            outline: none;
-        }
-    }
-
-    .main-content {
-        grid-row-start: 2;
-        width: 100%;
-        height: 100%;
-
-        .content-border {
-            height: 100px;
-            margin: 20px 20px 0 20px;
-            border-radius: 10px;
-            background-color: white;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 5px 6px #2c3e50;
-
-            .name {
-                flex-shrink: 0.6;
-                display: flex;
-                width: 100%;
-                font-size: clamp(30px, 3vmax, 40px);
-                font-weight: bold;
-                color: #34495e;
-                margin-left: 20px;
-            }
-
-            .icon {
-                flex-shrink: 0;
-                display: flex;
-                height: 80px;
-                width: 80px;
-                border-radius: 10px;
-                margin-left: 10px;
-                background-color: #2c3e50;
-            }
-
-            .progress-bar {
-                visibility: hidden;
-                width: 100%;
-                height: 10%;
-                margin-right: 20px;
-                border-radius: 2px;
-                align-items: center;
-
-                .download-status {
-                    position: relative;
-                    height: 100%;
-                    width: 100%;
-                    font-size: 1.5vmax;
-                    font-weight: bold;
-                }
-
-                .background {
-                    display: flex;
-                    position: relative;
-                    border-radius: inherit;
-                    height: 100%;
-                    width: 100%;
-                    background-color: #7f8c8d;
-                    align-items: center;
-
-                    .filler {
-                        border-radius: inherit;
-                        height: 115%;
-                        transition: width 0.25s ease-in-out;
-                        background-color: #f39c12;
-                        box-shadow: 0 5px 6px #2c3e50;
-                    }
-                }
-            }
-
-            .buttons-container {
-                display: flex;
-                margin-right: 20px;
-
-                .button {
-                    color: white;
-                    height: 30px;
-                    width: 30px;
-                    border-radius: 10px;
-                    background-color: #2c3e50;
-                    box-shadow: 0 2px 6px #2c3e50;
-                    border: 0;
-                    font-size: 20px;
-                    outline: none;
-                }
-
-                .center {
-                    margin-left: 10px;
-                    margin-right: 10px;
-                }
-            }
+          color: white;
+          height: 30px;
+          width: 30px;
+          border-radius: 10px;
+          background-color: #2c3e50;
+          box-shadow: 0 2px 6px #2c3e50;
+          border: 0;
+          font-size: 20px;
+          outline: none;
+          cursor: pointer;
         }
 
-        .description-border {
-            height: 200px;
-            margin: 10px 20px 10px 20px;
-            border-radius: 10px;
-            background-color: white;
-            padding: 10px;
-            text-align: center;
-            box-shadow: 0 5px 6px #2c3e50;
-
-            div {
-                font-size: clamp(20px, 2vmax, 28px);
-            }
+        button:first-of-type {
+          margin-right: 10px;
         }
-    }
-}
 
-@keyframes fadein {
-    from {
-        opacity: 0;
-        transform: translateX(-5%);
+        button:last-of-type {
+          margin-left: 10px;
+        }
+      }
     }
-    to {
-        opacity: 1;
-        transform: translateX(0);
+
+    .description-border {
+      height: 200px;
+      margin: 10px 20px;
+      border-radius: 10px;
+      background-color: white;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 5px 6px #2c3e50;
+
+      div {
+        font-size: clamp(20px, 2vmax, 28px);
+      }
     }
+  }
 }

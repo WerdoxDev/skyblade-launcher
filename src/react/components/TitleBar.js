@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {transformAnimation} from '../utilities/animations';
 import findByType from '../utilities/find-by-type';
 import './css/TitleBar.css';
 import {channels} from '/../Users/MuffinPlayz/skyblade-launcher/src/shared/constants';
@@ -10,15 +9,6 @@ const Close = () => null;
 const {ipcRenderer} = window;
 
 class TitleBar extends Component {
-    handleHover(id) {
-        console.log();
-        transformAnimation('#' + id, 250, null, 3);
-    }
-
-    handleLeave(id) {
-        transformAnimation('#' + id, 250, null, 0);
-    }
-
     handleClick(id) {
         ipcRenderer.send(channels.TITLE_BAR, id)
     }
@@ -34,8 +24,6 @@ class TitleBar extends Component {
             <button id="minimize"
                     text={minimize.props.text}
                     onClick={() => this.handleClick('minimize')}
-                    onMouseEnter={() => this.handleHover('minimize')}
-                    onMouseLeave={() => this.handleLeave('minimize')}
             >
                 {minimize.props.text}
             </button>
@@ -53,8 +41,6 @@ class TitleBar extends Component {
             <button id="maximize" className="center"
                     text={maximize.props.text}
                     onClick={() => this.handleClick('maximize')}
-                    onMouseEnter={() => this.handleHover('maximize')}
-                    onMouseLeave={() => this.handleLeave('maximize')}
             >
                 {maximize.props.text}
             </button>
@@ -72,8 +58,6 @@ class TitleBar extends Component {
             <button id="close"
                     text={close.props.text}
                     onClick={() => this.handleClick('close')}
-                    onMouseEnter={() => this.handleHover('close')}
-                    onMouseLeave={() => this.handleLeave('close')}
             >
                 {close.props.text}
             </button>
