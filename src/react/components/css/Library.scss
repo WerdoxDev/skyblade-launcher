@@ -1,0 +1,13 @@
+.library-container {
+  display: grid;
+  height: 100%;
+  margin-bottom: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  grid-template-rows: repeat(5, 230px);
+  gap: 2rem 2rem;
+
+  .spacer {
+    height: 250px;
+    width: 100%;
+  }
+}

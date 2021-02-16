@@ -1,139 +1,28 @@
 import React, {Component} from "react";
 import "./App.css";
-import GameView from "./components/GameView";
 import NavButton from "../react/components/NavButton";
 import TitleBar from "../react/components/TitleBar";
-import GameStoreView from "../react/components/GameStoreView";
 import TopTitleButton from "../react/components/TopTitleButton";
-import {Provider} from "./components/MainProvider";
-import {channels} from "../shared/constants";
-
-const electron = window.require?.('electron');
-const {ipcRenderer} = electron ?? {};
-
-const STORE_GAMES = [
-    {
-        name: "PlanZ",
-        desc: "Zombie survival Game",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    }
-];
-
-const USER_GAMES = [
-    {
-        name: "PlanZ",
-        desc: "Zombie survival Game",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    },
-    {
-        name: "TestItem",
-        desc: "This is a test desc",
-        image: "planz-logo.jpeg"
-    }
-];
+import Tabs from "./components/Tabs";
 
 class App extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            appVersion: ""
-        };
-        ipcRenderer?.send(channels.APP_INFO);
-        ipcRenderer?.on(channels.APP_INFO, (event, arg) => {
-            ipcRenderer.removeAllListeners(channels.APP_INFO);
-            const appVersion = arg;
-            this.setState({appVersion});
-        });
+        this.titleName = React.createRef();
+        this.leftNav = React.createRef();
+        this.buttonsContainer = React.createRef();
     }
 
     updateSize() {
-        let title = document.getElementById('title-name');
-        let leftNav = document.getElementById('left-nav');
-        let sideButtons = document.getElementsByClassName('button-container');
-        title.style.width = `${title.clientHeight}px`;
-        leftNav.style.width = `${title.clientHeight}px`;
-        Array.prototype.forEach.call(sideButtons, function (elem) {
-            elem.style.height = `${title.clientHeight}px`;
+        this.titleName.current.style.width = `${this.titleName.current.clientHeight}px`;
+        this.leftNav.current.style.width = `${this.titleName.current.clientHeight}px`;
+        Array.prototype.forEach.call(this.buttonsContainer.current, function (elem) {
+            elem.style.height = `${this.titleName.current.clientHeight}px`;
         });
     }
 
     componentDidMount() {
-        window.onresize = this.updateSize;
+        window.onresize = () => this.updateSize();
         this.updateSize();
     }
 
@@ -145,11 +34,8 @@ class App extends Component {
                     <TitleBar.Maximize text="+"/>
                     <TitleBar.Close text="x"/>
                 </TitleBar>
-                {/*<div className="vl1"/>*/}
-                {/*<div className="vl2"/>*/}
-                {/*<div className="vl3"/>*/}
                 <div className="top-title">
-                    <div className="name" id="title-name">
+                    <div className="name" ref={this.titleName}>
                         <div className="name-border">
                             <h2>SB</h2>
                         </div>
@@ -174,9 +60,9 @@ class App extends Component {
                         <div className="downloads"/>
                     </div>
                 </div>
-                <div className="left-nav" id="left-nav">
+                <div className="left-nav" ref={this.leftNav}>
                     <div className="content-container">
-                        <div className="buttons-container" id="buttons-container">
+                        <div className="buttons-container" ref={this.buttonsContainer}>
                             <NavButton number="0"/>
                             <NavButton number="1"/>
                             <NavButton number="2"/>
@@ -185,56 +71,7 @@ class App extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="center-content">
-                    <Provider>
-                        <div id="home-container" className="home-container" name="tab-content">
-                            <div className="home-content">
-                                <h1>Home</h1>
-                                <p>Home is where the heart is.</p>
-                            </div>
-                        </div>
-                        <div id="store-container" className="store-container" name="tab-content">
-                            <div className="title-container">
-                                <h1>Title Image</h1>
-                            </div>
-                            <div className="games-container">
-                                {STORE_GAMES.map(game => (
-                                    <GameView>
-                                        <GameView.Name>
-                                            {game.name + ": " + game.desc}
-                                        </GameView.Name>
-                                        <GameView.Image src={game.image}/>
-                                    </GameView>
-                                ))}
-                            </div>
-                        </div>
-                        <GameStoreView/>
-                        <div id="library-container" className="library-container" name="tab-content">
-                            {USER_GAMES.map(game => (
-                                <GameView>
-                                    <GameView.Name>
-                                        {game.name + ": " + game.desc}
-                                    </GameView.Name>
-                                    <GameView.Image src={game.image}/>
-                                </GameView>
-                            ))}
-                            <div className="spacer"/>
-                        </div>
-                        <div id="friends-container" className="friends-container" name="tab-content">
-                            <div className="friends-content">
-                                <h1>Friends</h1>
-                                <p>Invite your friends! they need you!!</p>
-                            </div>
-                        </div>
-                        <div id="settings-container" className="settings-container" name="tab-content">
-                            <div className="settings-content">
-                                <h1>Settings</h1>
-                                <p>Change those settings man!</p>
-                            </div>
-                        </div>
-                        <h5 className="version-text">{this.state.appVersion}</h5>
-                    </Provider>
-                </div>
+                <Tabs/>
             </div>
         );
     }

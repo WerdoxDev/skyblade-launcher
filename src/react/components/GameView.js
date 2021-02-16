@@ -1,86 +1,118 @@
 import React, {Component} from "react";
-import findByType from "../utilities/find-by-type";
-import {transformAnimation, scaleAnimation} from "../utilities/animations";
 import switchToPage from "../utilities/switch-to-page";
-import {Context} from "./MainProvider";
 import "./css/GameView.css";
-
-const Name = () => null;
-const Image = () => null;
+import {userGames} from "../../shared/games";
 
 class GameView extends Component {
     constructor(props) {
         super(props);
+        this.playButton = React.createRef();
+        this.image = React.createRef();
+        this.gameContainer = React.createRef();
         this.state = {
-            id: "game-container-" + Math.floor(Math.random() * Math.floor(1000))
-        };
-    }
-
-    handleClick(context) {
-        switchToPage("game-store-container", "grid");
-        const {children} = this.props;
-        const name = findByType(children, Name);
-        context.setMessage(name.props.children);
-    }
-
-    handleHover() {
-        scaleAnimation("#" + this.state.id + " .game-logo", 500, "1.1", null);
-        transformAnimation("#" + this.state.id + " .description", 500, null, 5);
-    }
-
-    handleLeave() {
-        scaleAnimation("#" + this.state.id + " .game-logo", 500, "1", null);
-        transformAnimation("#" + this.state.id + " .description", 500, null, 0);
-    }
-
-    renderName() {
-        const {children} = this.props;
-        const name = findByType(children, Name);
-        if (!name) {
-            return null;
+            game: userGames[this.props.gameId - 1],
         }
-
-        return (
-            <div className="game-desc">
-                <h2>{name.props.children}</h2>
-            </div>
-        );
     }
 
-    renderImage() {
-        const {children} = this.props;
-        const image = findByType(children, Image);
-        if (!image) {
-            return null;
-        }
+    updateState(channel, data) {
+        this.props.changeValue(channel, data);
+        console.log('Update state from GameView in channel: ' + channel);
+    }
 
-        return (
-            <div className="game-logo">
-                <img src={image.props.src} alt="game-logo"/>
-            </div>
-        );
+    handleClick(e, id) {
+        if (id === 'info') {
+            switchToPage("game-store-container", "grid");
+            this.updateState('update', this.props.gameId);
+            e.stopPropagation();
+        } else if (id === 'container') {
+            if (!this.state.game.exists()) {
+                switchToPage("game-store-container", "grid");
+                this.updateState('update', this.props.gameId);
+            } else {
+                this.state.game.execute(() => {
+                    this.updateState('update', this.props.gameId);
+                    this.gameRunState();
+                }, () => {
+                    this.updateState('update', this.props.gameId);
+                    this.gameExitState();
+                });
+            }
+        }
+    }
+
+    gameRunState() {
+        this.playButton.current.style.backgroundImage = 'none';
+        this.playButton.current.style.backgroundColor = '#1c1d22';
+        this.playButton.current.textContent = 'Running';
+        this.playButton.current.style.color = 'white'
+        if (this.state.game) this.state.game.setIsRunning(true);
+    }
+
+    gameExitState() {
+        this.playButton.current.style.backgroundImage = 'linear-gradient(to bottom, #24d9a1, #3dd2c6)';
+        this.playButton.current.style.backgroundColor = 'none';
+        this.playButton.current.style.color = 'black';
+        if (this.state.game) this.state.game.setIsRunning(false);
+
+        if (this.state.game.exists()) {
+            this.playButton.current.textContent = 'Play';
+            this.image.current.style.filter = 'grayscale(0%)';
+        } else {
+            this.playButton.current.textContent = 'Install';
+            this.image.current.style.filter = 'grayscale(100%)';
+        }
+    }
+
+    componentDidMount() {
+        if (this.state.game.exists()) {
+            this.playButton.current.textContent = 'Play';
+            this.image.current.style.filter = 'grayscale(0%)';
+        } else {
+            this.playButton.current.textContent = 'Install';
+            this.image.current.style.filter = 'grayscale(100%)';
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (this.props.value.channel === 'update' && this.props !== prevProps) {
+            this.setState((state, props) => ({
+                game: userGames[props.gameId - 1]
+            }), () => {
+                this.state.game.isRunning ? this.gameRunState() : this.gameExitState();
+            });
+        }
     }
 
     render() {
         return (
-            <Context.Consumer>
-                {context => (
-                    <div
-                        className="game-container"
-                        id={this.state.id}
-                        onClick={() => this.handleClick(context)}
-                        onMouseEnter={() => this.handleHover()}
-                        onMouseLeave={() => this.handleLeave()}
-                    >
-                        {this.renderImage()}
-                        {this.renderName()}
+            <div
+                className="game-container"
+                id={`game-container-${this.state.game.id}`}
+                ref={this.state.gameContainer}
+                onClick={(e) => this.handleClick(e, "container")}
+                // onMouseEnter={() => this.handleHover()}
+                // onMouseLeave={() => this.handleLeave()}
+            >
+                <div className="game-info">
+                    <div className="game-info__background"/>
+                    <div className="game-info__name">{this.state.game.shortName}</div>
+                    <div className="game-info__desc">{this.state.game.desc}</div>
+                    <div className="game-info__play" ref={this.playButton}>Play</div>
+                    <div className="game-info__store"
+                         onClick={(e) => this.handleClick(e, "info")}>
+                        Game Info
                     </div>
-                )}
-            </Context.Consumer>
+                </div>
+                <div className="game-logo">
+                    <img src={this.state.game.image} alt="game-logo" ref={this.image}/>
+                </div>
+                <div className="game-name">
+                    <div/>
+                    <h2>{this.state.game.name}</h2>
+                </div>
+            </div>
         );
     }
 }
 
-GameView.Name = Name;
-GameView.Image = Image;
 export default GameView;

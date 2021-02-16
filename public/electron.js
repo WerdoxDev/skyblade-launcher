@@ -33,7 +33,7 @@ function createWindow() {
     win.loadURL(
         isDev
             ? "http://localhost:3000"
-            : `file://${path.join(__dirname, "/index.html")}`
+            : `file://${path.join(__dirname, "../build/index.html")}`
     );
 
     initializeDownloadEvents();
@@ -95,7 +95,8 @@ ipcMain.on(channels.DOWNLOAD_CANCEL, () => {
 
 function initializeDownloadEvents() {
     win.webContents.session.on("will-download", (event, item, webContents) => {
-        item.setSavePath(path.join(__dirname, item.getFilename()));
+        item.setSavePath(path.join(path.join(__dirname, '../download/'), item.getFilename()));
+        win.send(channels.DOWNLOAD_INFO, {fileName: item.getFilename()});
         let lastReceivedBytes = 0;
         item.on("updated", (event, state) => {
             downloadItem = item;
@@ -119,6 +120,7 @@ function initializeDownloadEvents() {
         item.once("done", (event, state) => {
             if (state === "completed") {
                 console.log("Download successfully");
+                win.send(channels.DOWNLOAD_COMPLETE);
             } else {
                 console.log(`Download failed: ${state}`);
             }
